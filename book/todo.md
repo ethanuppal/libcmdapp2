@@ -1,0 +1,3 @@
+- [ ] multiple-argument options
+- [ ] on-line parsing for duplicate flags, or maybe arrays?
+- [ ] code copyright laws into it since it won't extend forever

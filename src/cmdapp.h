@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <stdbool.h>
+
 #ifdef CA_PUBLIC_SRC
 "Error: this header should be the only place where CA_PUBLIC_SRC is defined.";
 #endif
@@ -30,6 +32,13 @@ void ca_hello(void);
  * @returns Zero on success, nonzero on failure.
  */
 int ca_init(int argc, const char* argv[]);
+
+/**
+ * Writes a description, overwriting the previous description.
+ *
+ * If `NULL` is passed, this function has no effect.
+ */
+void ca_description(const char* description);
 
 /**
  * Adds an author.
@@ -80,29 +89,38 @@ void ca_versioning_info(const char* info);
  */
 void ca_synopsis(const char* synopsis);
 
+/* Whether the argument `--` should be ignored and all subsequent arguments
+ * treated verbatim. This is enabled by default. */
+void ca_use_end_of_options(bool use);
+
 /**
  * Registers a command-line option `short_opt`/`long_opt`.
  *
- * @param short_opt The one-letter version of the option.
+ * The `behavior` parameter is easily the most confusing. I have written a
+ * \ref book/opt.md "comprehensive breakdown" of the parameter.
+ *
+ * @param short_opt The one-letter version of the option. If `\0` is passed,
+ * this function behaves like ca_long_opt().
  * @param long_opt The long version of the option.
  * @param behavior Characteristics of the option, such as whether it takes an
  * argument.
  * @param result A pointer to a string initialized with the argument passed to
  * this option.
+ * @param description A description of the option.
+ *
+ * @returns Zero on success, nonzero on failure.
  */
-void ca_opt(char short_opt, const char* long_opt, const char* behavior,
-    const char** result);
+int ca_opt(char short_opt, const char* long_opt, const char* behavior,
+    const char** result, const char* description);
 
 /**
  * Registers a (strictly long) command-line option `long_opt`.
  *
- * @param behavior Characteristics of the option, such as whether it takes an
- * argument.
- * @param result A pointer to a string initialized with the argument passed to
- * this option.
+ * Behaves equivalently to ca_opt() but with the short option variant neglected.
+ * Please see there for further information.
  */
-void ca_long_opt(const char* long_opt, const char* behavior,
-    const char** result);
+int ca_long_opt(const char* long_opt, const char* behavior, const char** result,
+    const char* description);
 
 /**
  * Runs the parser on the command line arguments.
@@ -121,6 +139,8 @@ void ca_parse(void* user_data);
  * Prints versioning information to standard output.
  */
 void ca_print_version(void);
+
+void ca_print_help(void);
 
 #ifdef CA_PRIVATE_SRC
 
