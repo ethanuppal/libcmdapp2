@@ -50,7 +50,7 @@ struct ca_opt {
     const char* description;  ///< Option description.
 };
 
-/* Library data for the command line app. */
+/** Library data for the command line app. */
 struct ca_app {
     const char* program;      ///< The name of the program as invoked.
 
@@ -78,19 +78,18 @@ struct ca_app {
     size_t options_length;
     size_t options_capacity;
     struct ca_opt* options;  ///< Program options.
-
-    // const char* description;
 };
 
+/** Global library state. */
 static struct ca_app app;
 
-void ca_abort(const char* msg) {
+static void ca_abort(const char* msg) {
     fprintf(stderr, "library aborted: %s\n", msg);
     exit(1);
 }
 
 void ca_hello() {
-    if (printf(HELLO_STRING) != sizeof(HELLO_STRING) - 1) {
+    if (printf("%s", HELLO_STRING) != sizeof(HELLO_STRING) - 1) {
         perror("ca_hello");
     }
 }
@@ -101,7 +100,7 @@ void ca_hello() {
  * Consistency means that `argc` is strictly positive, `argv` is non-`NULL`, and
  * there are at least `argc` entries in `argv`.
  */
-static bool check_arg_consistency(int argc, const char* argv[]) {
+static bool internal_ca_check_arg_consistency(int argc, const char* argv[]) {
     // check: argc is strictly positive
     if (argc < 1) {
         return false;
@@ -126,7 +125,7 @@ static bool check_arg_consistency(int argc, const char* argv[]) {
 }
 
 /** Returns the current year or `CA_NO_YEAR` on failure. */
-static int get_current_year(void) {
+static int internal_ca_get_current_year(void) {
     // https://stackoverflow.com/questions/1442116/how-to-get-the-date-and-time-values-in-a-c-program
     time_t current_time = time(NULL);
     if (current_time == (time_t)-1) {
@@ -142,38 +141,40 @@ static int get_current_year(void) {
     return current_localtime.tm_year + 1900 /* base year for time */;
 }
 
-static bool is_short_flag(char flag) {
+static bool internal_ca_is_short_flag(char flag) {
     return isalnum(flag);
 }
 
 /* Parses the given `behavior` string and initializes `opt`. Returns zero on
  * success, nonzero otherwise. */
-static int ca_opt_parse_behavior(struct ca_opt* opt, const char* behavior) {
+static int internal_ca_opt_parse_behavior(struct ca_opt* opt,
+    const char* behavior) {
     // no behavior, fall back to defaults
     if (behavior[0] == 0) {
         return 0;
     }
 
     // otherwise we must specify that it takes an argument
-    if (behavior[0] != '.') {
-        return 1;
-    }
-    opt->flags |= CA_OPT_ARG;
+    if (behavior[0] == '.') {
+        opt->flags |= CA_OPT_ARG;
 
-    // we check whether the argument is optional
-    if (behavior[1] == '?') {
-        opt->flags |= CA_OPT_OPTARG;
+        // we check whether the argument is optional
+        if (behavior[1] == '?') {
+            opt->flags |= CA_OPT_OPTARG;
+        } else if (behavior[1] == '\0') {
+            return 0;
+        }
+
+        // check if no quantifier provided
+        if (behavior[2] == '\0') {
+            return 0;
+        }
     }
 
-    // check if no quantifier provided
-    if (behavior[2] == '\0') {
-        return 0;
-    }
-
-    // find the first position after ?+whitespace where we encounter a
+    // find the first position after . + ? + whitespace where we encounter a
     // quantifier
-    size_t i = 1;
-    while (strchr("? \t", behavior[i]) != NULL
+    size_t i = 0;
+    while (strchr(".? \t", behavior[i]) != NULL
            && strchr("!@&", behavior[i]) == NULL) {
         i++;
     }
@@ -201,7 +202,7 @@ static int ca_opt_parse_behavior(struct ca_opt* opt, const char* behavior) {
 
     // validate that it is only a list of flags
     for (size_t i = 0; opt->conflicts[i]; i++) {
-        if (!is_short_flag(opt->conflicts[i])) {
+        if (!internal_ca_is_short_flag(opt->conflicts[i])) {
             return 1;
         }
     }
@@ -234,7 +235,7 @@ static void print_authors(void) {
 
 int ca_init(int argc, const char* argv[]) {
     // ensure inputs are safe to use
-    if (!check_arg_consistency(argc, argv)) {
+    if (!internal_ca_check_arg_consistency(argc, argv)) {
         errno = EINVAL;
         return 1;
     }
@@ -348,7 +349,7 @@ int ca_opt(char short_opt, const char* long_opt, const char* behavior,
         errno = EINVAL;
         return 1;
     }
-    if (short_opt != '\0' && !is_short_flag(short_opt)) {
+    if (short_opt != '\0' && !internal_ca_is_short_flag(short_opt)) {
         errno = EINVAL;
         return 1;
     }
@@ -365,7 +366,7 @@ int ca_opt(char short_opt, const char* long_opt, const char* behavior,
     opt.description = description;
 
     // parse behavior
-    if (ca_opt_parse_behavior(&opt, behavior) != 0) {
+    if (internal_ca_opt_parse_behavior(&opt, behavior) != 0) {
         errno = EINVAL;
         return 1;
     }
@@ -415,7 +416,7 @@ void ca_print_version() {
     // if they are the same, just print one year
     // if they are different, print them both separated with a dash
     if (app.year != CA_NO_YEAR) {
-        int current_year = get_current_year();
+        int current_year = internal_ca_get_current_year();
         if (current_year == CA_NO_YEAR) {
             printf("%d ", app.year);
         } else if (app.year == current_year) {

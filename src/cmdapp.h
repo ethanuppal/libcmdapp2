@@ -94,7 +94,8 @@ void ca_synopsis(const char* synopsis);
 void ca_use_end_of_options(bool use);
 
 /**
- * Registers a command-line option `short_opt`/`long_opt`.
+ * Registers a command-line option `short_opt`/`long_opt`. Sets `errno` on
+ * failure.
  *
  * The `behavior` parameter is easily the most confusing. I have written a
  * \ref book/opt.md "comprehensive breakdown" of the parameter.

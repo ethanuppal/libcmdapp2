@@ -23,12 +23,12 @@ int main(int argc, const char* argv[]) {
     ca_synopsis("[OPTION]... FILE");
 
     // prorgam options
-    ca_opt('a', "alert", "", NULL, "oh no!");
+    ca_opt('a', "alert", "!@bef", NULL, "oh no!");
     ca_opt('b', "very-long-name", "", NULL,
         "this text has been put down a line");
 
     const char* expr = "EXPR";
-    ca_opt('e', "expr", ". !@f", &expr, "evaluates an expression");
+    ca_opt('e', "expr", ".? !@f", &expr, "evaluates an expression");
 
     const char* filename = "FILE";
     ca_opt('f', "file", ". !@e", &filename, "processes a file");
@@ -36,6 +36,6 @@ int main(int argc, const char* argv[]) {
     // parse
     // ca_parse(NULL);
 
-    ca_print_version();
+    // ca_print_version();
     ca_print_help();
 }
