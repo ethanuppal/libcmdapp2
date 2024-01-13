@@ -37,10 +37,12 @@ Example `behavior` | Description
 `""` | The empty string means that there is no additional behavior associated with this option.
 `"."` | A dot means that the option takes an argument.
 `".?"` | A question mark following the dot means that the option's argument is optional.
+`"*"` | A star means that the option occurs in multiflag mode.
 `". @abc"` | `@abc` means that this option can only be passed when __at least one__ of `-a`, `-b`, or `-c` is passed.
 `".@abc"` | Whitespace isn't needed.
 `". &abc"` | `&abc` means that this option can only be passed when __all__ of `-a`, `-b`, or `-c` are passed.
 `". !@abc"` | `!&abc` means that this option can only be passed when __none__ of `-a`, `-b`, or `-c` are passed.
+`"<abc"` | `<abc` means that this option can only be passed when only some of `-a`, `-b`, or `c` are passed, but not when any other flag is passed.
 
 \warning
 Note that you will not be able to specify referencing behavior for options that do not have a short flag form.
@@ -51,10 +53,16 @@ Symbol | Meaning
 --- | ---
 `.` | The option takes an argument.
 `?` following `.` | The argument is optional.
+`*` | The option occurs in multiflag mode.
 `!` preceding `@` or `&` | The following quantifier is negated.
 `@` | At least one of the following.
 `&` | All of the following.
+`<` | Only some of the following.
 
-Essentially, the quantifiers allow to express relationships between options. If you want an option that must be passed by itself, use `"@"` or `"&"` with no additional flags. In other words, the option is only valid when any (or all) of *nothing* is passed. If you want an option that is dependent on another option `-a`, use `"&a"`. If you want to disable an option when the either `-a` and `-b` flags are passed, use `"!@ab"` (or `"!@ba"`).
+Essentially, the quantifiers `@`, `&`, and `<` enable you to express relationships between options:
 
-The argument information (`"."` or `".?"`) must be supplied before quantifiers, and arbitrary whitespace may be used to separate them for readability. It is possible to have quantifiers with no argument information.
+- If you want an option `-a` that must be passed by itself, use `"<a"`. 
+- If you want an option that is dependent on another option `-a`, use `"&a"`. 
+- If you want to disable an option when the either `-a` and `-b` flags are passed, use `"!@ab"` (or `"!@ba"`).
+
+The argument information (`"."`, `".?"`, or `"*"`) must be supplied before quantifiers, and arbitrary whitespace may be used to separate them for readability. It is possible to have quantifiers with no argument information, and vice versa.

@@ -97,5 +97,6 @@
     },
     "C_Cpp.default.includePath": [
         "./src"
-    ]
+    ],
+    "C_Cpp.formatting": "clangFormat"
 }
