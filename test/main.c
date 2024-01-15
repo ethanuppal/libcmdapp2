@@ -47,6 +47,7 @@ int main(int argc, const char* argv[]) {
     // prorgam options
     const char* a_arg = NULL;
     assert(ca_opt('a', "aa", ".", &a_arg, "required arg") == 0);
+    assert(ca_opt('A', "aa", ".?", &a_arg, "optional arg") == 0);
     assert(ca_opt('b', "bb", "*", NULL, "multiflag") == 0);
     assert(ca_opt('c', "cc", "*", NULL, "multiflag") == 0);
     assert(ca_opt('d', "dd", "!@bc", NULL, "incompatible with -b and -c") == 0);

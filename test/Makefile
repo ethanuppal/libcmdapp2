@@ -44,6 +44,9 @@ test: build_test
 	expect 1 "./main -O -d"; \
 	expect 0 "./main --help"; \
 	expect 1 "./main -h -ax"; \
+	expect 0 "./main -Ax"; \
+	expect 0 "./main -A"; \
+	expect 0 "./main -A -b"; \
 	'
 
 build_test: $(SRC)
