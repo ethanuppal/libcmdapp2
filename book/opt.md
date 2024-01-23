@@ -7,7 +7,7 @@ You can supply options through two main functions: ca_opt() and ca_long_opt(). S
 The ca_opt() function is defined as follows:
 
 ```c
-int ca_opt(
+bool* ca_opt(
     char short_opt, 
     const char* long_opt, 
     const char* behavior,

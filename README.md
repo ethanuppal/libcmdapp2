@@ -29,6 +29,9 @@ It aims to provide flexible behavior with the least verbosity possible, intellig
     </tr>
 </table>
 
+> [!NOTE]
+> The latest version of this document can be found [here](book/main.md)
+
 # Features
 
 This library supports
@@ -41,15 +44,19 @@ This library supports
     ```
 - Long and short options
     ```c
-    const char* expr = "EXPR";
-    ca_opt('e', "expr", ".", &expr, "evaluates an expression");
+    const char* expr = "default";
+    ca_opt('e', "expr", ".EXPR", &expr, "evaluates an expression");
     ```
 - Automatic `--help` and `--version` generation, `ca_print_version()`, `ca_print_help()`
+    ```
+    Options:
+     -e, --expr[=EXPR]  evaluates an expression
+    ```
     - The default implementation integrates with [`help2man`](https://www.gnu.org/software/help2man/) for __automatic man pages__
     - You can override with `ca_override_help_version()`
 - Error handling and option conflicts
 
-You can read more about supplying options [here](opt.md).
+You can read more about supplying options [here](book/opt.md).
 
 # Install
 

@@ -93,33 +93,44 @@ static int ca_parse_opt_behavior(struct ca_opt* opt, const char* behavior) {
         return 0;
     }
 
+    size_t i = 0;
+
     // otherwise we must specify that it takes an argument or is in multiflag
     if (behavior[0] == '.') {
         opt->flags |= CA_OPT_ARG;
+        i++;
+
+        if (isalpha(behavior[i])) {
+            opt->arg_name = behavior + 1;
+            while (isalpha(behavior[i])) {
+                i++;
+            }
+        }
 
         // we check whether the argument is optional
-        if (behavior[1] == '?') {
+        if (behavior[i] == '?') {
             opt->flags |= CA_OPT_OPTARG;
-        } else if (behavior[1] == '\0') {
+            i++;
+        } else if (behavior[i] == '\0') {
             return 0;
         }
 
         // check if no quantifier provided
-        if (behavior[2] == '\0') {
+        if (behavior[i] == '\0') {
             return 0;
         }
     } else if (behavior[0] == '*') {
         opt->flags |= CA_OPT_MFLAG;
+        i++;
 
         // check if no quantifier provided
-        if (behavior[1] == '\0') {
+        if (behavior[i] == '\0') {
             return 0;
         }
     }
 
     // find the first position after . + ? + whitespace where we encounter a
     // quantifier
-    size_t i = 0;
     while (strchr(".? \t", behavior[i]) != NULL
            && strchr("!@&", behavior[i]) == NULL) {
         i++;
@@ -340,16 +351,16 @@ void ca_use_end_of_options(bool use) {
     app.use_end_of_options = use;
 }
 
-int ca_opt(char short_opt, const char* long_opt, const char* behavior,
+bool* ca_opt(char short_opt, const char* long_opt, const char* behavior,
     const char** result, const char* description) {
     // these parameters must be passed
     if (!long_opt || !behavior) {
         errno = EINVAL;
-        return 1;
+        return NULL;
     }
     if (short_opt != '\0' && !ca_is_short_flag(short_opt)) {
         errno = EINVAL;
-        return 1;
+        return NULL;
     }
 
     // initialize option
@@ -360,36 +371,29 @@ int ca_opt(char short_opt, const char* long_opt, const char* behavior,
     opt.flags = 0;
     opt.quantifier_is_negated = false;
     opt.quantifier = CA_OPT_QUANTIFIER_NONE;
-    opt.arg_name = NULL;
+    opt.arg_name = "ARG";
     opt.description = description;
 
     // parse behavior
     if (ca_parse_opt_behavior(&opt, behavior) != 0) {
         errno = EINVAL;
-        return 1;
+        return NULL;
     }
 
     // if it takes an arg, it has to store it somewhere
-    // the pointer will be to the name of the arg, or NULL if a default is to be
-    // provided
-    if (opt.flags & CA_OPT_ARG) {
-        if (!result) {
-            errno = EINVAL;
-            return 1;
-        } else {
-            opt.arg_name = *result ? *result : "ARG";
-            *result = NULL;  // reset back to NULL
-        }
+    if (opt.flags & CA_OPT_ARG && !result) {
+        errno = EINVAL;
+        return NULL;
     }
 
     ca_dynamic_push(&app.options, app.options_length, app.options_capacity,
         opt);
 
-    return 0;
+    return &app.options[app.options_length - 1].was_passed;
 }
 
-int ca_long_opt(const char* long_opt, const char* behavior, const char** result,
-    const char* description) {
+bool* ca_long_opt(const char* long_opt, const char* behavior,
+    const char** result, const char* description) {
     return ca_opt(0, long_opt, behavior, result, description);
 }
 
@@ -827,7 +831,11 @@ void ca_print_help() {
             // print the long option with arg if necessary
             int chars_printed = printf("--%s", opt->long_opt);
             if (opt->flags & CA_OPT_ARG) {
-                chars_printed += printf("[=%s]", opt->arg_name);
+                chars_printed += printf("[=");
+                for (size_t j = 0; isalpha(opt->arg_name[j]); j++) {
+                    chars_printed += printf("%c", opt->arg_name[j]);
+                }
+                chars_printed += printf("]");
             }
 
             // determine if past the offset for printing descriptions

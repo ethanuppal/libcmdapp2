@@ -113,9 +113,9 @@ void ca_override_help_version(bool override_help, bool override_version);
  * this option.
  * @param description A description of the option.
  *
- * @returns Zero on success, nonzero on failure.
+ * @returns A handle to whether the flag was passed, or `NULL` on failure.
  */
-int ca_opt(char short_opt, const char* long_opt, const char* behavior,
+bool* ca_opt(char short_opt, const char* long_opt, const char* behavior,
     const char** result, const char* description);
 
 /**
@@ -124,8 +124,8 @@ int ca_opt(char short_opt, const char* long_opt, const char* behavior,
  * Behaves equivalently to ca_opt() but with the short option variant neglected.
  * Please see there for further information.
  */
-int ca_long_opt(const char* long_opt, const char* behavior, const char** result,
-    const char* description);
+bool* ca_long_opt(const char* long_opt, const char* behavior,
+    const char** result, const char* description);
 
 /**
  * Sets two on-line callbacks that will be invoked during parsing. The provided
@@ -212,7 +212,7 @@ struct ca_opt {
     const char** result;      ///< A pointer to where the passed arg should go.
     const char* arg_name;     ///< Name of the argument.
     const char* description;  ///< Option description.
-    bool was_passed;  ///< Whether the option has been passed in the curreint
+    bool was_passed;  ///< Whether the option has been passed in the current
                       ///< run of prasing.
 };
 

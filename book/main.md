@@ -43,10 +43,14 @@ This library supports
     ```
 - Long and short options
     ```c
-    const char* expr = "EXPR";
-    ca_opt('e', "expr", ". !@f", &expr, "evaluates an expression");
+    const char* expr = "default";
+    ca_opt('e', "expr", ".EXPR", &expr, "evaluates an expression");
     ```
-- Automatic `--help` and `--version` generation, ca_print_version(), ca_print_help()
+- Automatic `--help` and `--version` generation, `ca_print_version()`, `ca_print_help()`
+    ```
+    Options:
+     -e, --expr[=EXPR]  evaluates an expression
+    ```
     - The default implementation integrates with [`help2man`](https://www.gnu.org/software/help2man/) for __automatic man pages__
     - You can override with ca_override_help_version()
 - Error handling and option conflicts
@@ -116,11 +120,11 @@ ca_opt('b', "very-long-name", "", NULL,
     "this text has been put down a line");
 
 // options with arguments
-const char* expr = "EXPR";
-ca_opt('e', "expr", ". !@f", &expr, "evaluates an expression");
+const char* expr = "default";
+ca_opt('e', "expr", ".EXPR !@f", &expr, "evaluates an expression");
 
-const char* filename = "FILE";
-ca_opt('f', "file", ". !@e", &filename, "processes a file");
+const char* filename = "default";
+ca_opt('f', "file", ".FILE !@e", &filename, "processes a file");
 
 // help & version
 ca_opt('h', "help", "<h", NULL, "prints this info");

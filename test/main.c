@@ -46,21 +46,23 @@ int main(int argc, const char* argv[]) {
 
     // prorgam options
     const char* a_arg = NULL;
-    assert(ca_opt('a', "aa", ".", &a_arg, "required arg") == 0);
-    assert(ca_opt('A', "aa", ".?", &a_arg, "optional arg") == 0);
-    assert(ca_opt('b', "bb", "*", NULL, "multiflag") == 0);
-    assert(ca_opt('c', "cc", "*", NULL, "multiflag") == 0);
-    assert(ca_opt('d', "dd", "!@bc", NULL, "incompatible with -b and -c") == 0);
-    assert(ca_opt('O', "opt", "&ad", NULL, "depends on a and d") == 0);
+    bool* a = ca_opt('a', "aa", ".LOL", &a_arg, "required arg");
+    bool* A = ca_opt('A', "aa", ".?", &a_arg, "optional arg");
+    bool* b = ca_opt('b', "bb", "*", NULL, "multiflag");
+    bool* c = ca_opt('c', "cc", "*", NULL, "multiflag");
+    bool* d = ca_opt('d', "dd", "!@bc", NULL, "incompatible with -b and -c");
+    bool* O = ca_opt('O', "opt", "&ad", NULL, "depends on a and d");
 
-    assert(ca_opt('h', "help", "<h", NULL, "prints this info") == 0);
-    assert(ca_opt('v', "version", "<v", NULL, "prints version info") == 0);
+    ca_opt('h', "help", "<h", NULL, "prints this info");
+    ca_opt('v', "version", "<v", NULL, "prints version info");
 
     // parse
     ca_set_callbacks(opt_callback, arg_callback);
     if (ca_parse(app) != 0) {
         return 1;
     }
+
+    printf("a was passed: %s\n", (*a) ? "true" : "false");
 
     free(app);
 }
