@@ -7,5 +7,7 @@
 *.dSYM
 *~
 .clang-format
-docs/
 test/main
+./*
+src
+test
