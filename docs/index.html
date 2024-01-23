@@ -158,11 +158,11 @@ Example</h1>
 <div class="line">    <span class="stringliteral">&quot;this text has been put down a line&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// options with arguments</span></div>
-<div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* expr = <span class="stringliteral">&quot;EXPR&quot;</span>;</div>
-<div class="line"><a class="code hl_function" href="cmdapp_8c.html#a60a1007717d72dc779833f60f54d85c0">ca_opt</a>(<span class="charliteral">&#39;e&#39;</span>, <span class="stringliteral">&quot;expr&quot;</span>, <span class="stringliteral">&quot;. !@f&quot;</span>, &amp;expr, <span class="stringliteral">&quot;evaluates an expression&quot;</span>);</div>
+<div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* expr = <span class="stringliteral">&quot;default&quot;</span>;</div>
+<div class="line"><a class="code hl_function" href="cmdapp_8c.html#a60a1007717d72dc779833f60f54d85c0">ca_opt</a>(<span class="charliteral">&#39;e&#39;</span>, <span class="stringliteral">&quot;expr&quot;</span>, <span class="stringliteral">&quot;.EXPR !@f&quot;</span>, &amp;expr, <span class="stringliteral">&quot;evaluates an expression&quot;</span>);</div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* filename = <span class="stringliteral">&quot;FILE&quot;</span>;</div>
-<div class="line"><a class="code hl_function" href="cmdapp_8c.html#a60a1007717d72dc779833f60f54d85c0">ca_opt</a>(<span class="charliteral">&#39;f&#39;</span>, <span class="stringliteral">&quot;file&quot;</span>, <span class="stringliteral">&quot;. !@e&quot;</span>, &amp;filename, <span class="stringliteral">&quot;processes a file&quot;</span>);</div>
+<div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* filename = <span class="stringliteral">&quot;default&quot;</span>;</div>
+<div class="line"><a class="code hl_function" href="cmdapp_8c.html#a60a1007717d72dc779833f60f54d85c0">ca_opt</a>(<span class="charliteral">&#39;f&#39;</span>, <span class="stringliteral">&quot;file&quot;</span>, <span class="stringliteral">&quot;.FILE !@e&quot;</span>, &amp;filename, <span class="stringliteral">&quot;processes a file&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// help &amp; version</span></div>
 <div class="line"><a class="code hl_function" href="cmdapp_8c.html#a60a1007717d72dc779833f60f54d85c0">ca_opt</a>(<span class="charliteral">&#39;h&#39;</span>, <span class="stringliteral">&quot;help&quot;</span>, <span class="stringliteral">&quot;&lt;h&quot;</span>, NULL, <span class="stringliteral">&quot;prints this info&quot;</span>);</div>

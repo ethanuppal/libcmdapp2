@@ -81,7 +81,7 @@ $(function() {
 Overview</h1>
 <p>You can supply options through two main functions: <a class="el" href="cmdapp_8c.html#a60a1007717d72dc779833f60f54d85c0" title="Registers a command-line option short_opt/long_opt.">ca_opt()</a> and <a class="el" href="cmdapp_8c.html#a10a7a5907464784d9f5aa8317df8e1fe" title="Registers a (strictly long) command-line option long_opt.">ca_long_opt()</a>. Since <a class="el" href="cmdapp_8c.html#a10a7a5907464784d9f5aa8317df8e1fe" title="Registers a (strictly long) command-line option long_opt.">ca_long_opt()</a> behaves identically to <a class="el" href="cmdapp_8c.html#a60a1007717d72dc779833f60f54d85c0" title="Registers a command-line option short_opt/long_opt.">ca_opt()</a> save having no short flag form, I will focus only on the former here.</p>
 <p>The <a class="el" href="cmdapp_8c.html#a60a1007717d72dc779833f60f54d85c0" title="Registers a command-line option short_opt/long_opt.">ca_opt()</a> function is defined as follows:</p>
-<div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="cmdapp_8c.html#a60a1007717d72dc779833f60f54d85c0">ca_opt</a>(</div>
+<div class="fragment"><div class="line"><span class="keywordtype">bool</span>* <a class="code hl_function" href="cmdapp_8c.html#a60a1007717d72dc779833f60f54d85c0">ca_opt</a>(</div>
 <div class="line">    <span class="keywordtype">char</span> short_opt, </div>
 <div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span>* long_opt, </div>
 <div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span>* behavior,</div>
