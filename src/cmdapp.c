@@ -742,11 +742,15 @@ int ca_parse(void* user_data) {
                        && strcmp(result.opt->long_opt, "version") == 0) {
                 ca_print_version();
             } else {
-                app.opt_callback(result.opt->short_opt, result.opt->long_opt,
-                    result.arg, user_data);
+                if (app.opt_callback) {
+                    app.opt_callback(result.opt->short_opt,
+                        result.opt->long_opt, result.arg, user_data);
+                }
             }
         } else {
-            app.arg_callback(result.arg, user_data);
+            if (app.arg_callback) {
+                app.arg_callback(result.arg, user_data);
+            }
         }
     }
 
