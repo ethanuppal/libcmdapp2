@@ -62,7 +62,7 @@ int main(int argc, const char* argv[]) {
         return 1;
     }
 
-    printf("a was passed: %s\n", (*a) ? "true" : "false");
+    printf("a was passed: %s (arg was %s)\n", (*a) ? "true" : "false", a_arg);
 
     free(app);
 }

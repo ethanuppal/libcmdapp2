@@ -742,6 +742,9 @@ int ca_parse(void* user_data) {
                        && strcmp(result.opt->long_opt, "version") == 0) {
                 ca_print_version();
             } else {
+                if (result.opt->flags & CA_OPT_ARG) {
+                    *result.opt->result = result.arg;
+                }
                 if (app.opt_callback) {
                     app.opt_callback(result.opt->short_opt,
                         result.opt->long_opt, result.arg, user_data);

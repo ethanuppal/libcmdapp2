@@ -5,7 +5,7 @@
 SRCDIR		:= src
 INCLUDEDIR	:= src
 
-CC			:= $(shell which gcc-13 || which gcc || which clang)
+CC			:= $(shell which gcc || which clang)
 CFLAGS		:= -std=c99 -pedantic -Wall -Wextra -I $(INCLUDEDIR)
 CDEBUG		:= -g
 CRELEASE	:= -O2
