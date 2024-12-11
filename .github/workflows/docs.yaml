@@ -28,11 +28,11 @@ jobs:
       - name: Install Doxygen
         run: brew install doxygen
       - name: Build docs
-        run: doxygen
+        run: make docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'docs'
+          path: "docs"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

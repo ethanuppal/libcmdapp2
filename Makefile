@@ -79,7 +79,7 @@ docs:
 		echo "You can install it from https://www.doxygen.nl"; \
 	    exit; \
 	fi; \
-	doxygen
+	GIT_REVISION=$(shell git rev-parse --short HEAD) doxygen
 
 .PHONY: test
 test:
